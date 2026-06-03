@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXECOS Pro — Design System & Components</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        /* Component showcase specific styles */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .component-showcase {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .component-showcase h4 {
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: #d4a574;
+        }
+
+        .component-example {
+            margin-bottom: 16px;
+        }
+
+        .color-swatch {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin: 8px;
+        }
+
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .color-name {
+            font-size: 12px;
+            text-align: center;
+            max-width: 100px;
+        }
+
+        .color-code {
+            font-family: "Fira Code", monospace;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .sidebar-demo {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(15, 18, 25, 1), rgba(26, 47, 77, 0.1));
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .sidebar-demo-content {
+            display: flex;
+            height: 100%;
+        }
+
+        .demo-section {
+            margin-bottom: 48px;
+        }
+
+        .demo-section h2 {
+            font-size: 28px;
+            margin-bottom: 32px;
+            color: #e8e8e8;
+            border-bottom: 2px solid #d4a574;
+            padding-bottom: 12px;
+        }
+
+        .demo-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .demo-row.center {
+            justify-content: center;
+        }
+
+        .grid-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .typo-example {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(26, 47, 77, 0.3);
+            border-radius: 8px;
+        }
+
+        .code-block {
+            background: #1a2f4d;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+            font-family: "Fira Code", monospace;
+            font-size: 12px;
+            color: #9ca3af;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-primary-900 border-b border-border-DEFAULT backdrop-blur-md">
+        <div class="container flex-between py-4">
+            <div class="flex-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-lg flex-center font-bold text-primary-950">E</div>
+                <div>
+                    <h1 class="text-xl font-bold text-text-primary">EXECOS Pro</h1>
+                    <p class="text-xs text-text-secondary">Enterprise Design System</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex gap-8">
+                <a href="#colors" class="text-text-secondary hover:text-accent transition-colors">Colors</a>
+                <a href="#typography" class="text-text-secondary hover:text-accent transition-colors">Typography</a>
+                <a href="#buttons" class="text-text-secondary hover:text-accent transition-colors">Buttons</a>
+                <a href="#components" class="text-text-secondary hover:text-accent transition-colors">Components</a>
+            </nav>
+        </div>
+    </div>
+
+    <main class="container py-12 md:py-16">
+        <!-- Hero Section -->
+        <section class="mb-24">
+            <div class="max-w-3xl">
+                <h2 class="text-5xl md:text-6xl font-bold text-gradient mb-6">
+                    Enterprise-Grade Design
+                </h2>
+                <p class="text-xl text-text-secondary leading-relaxed mb-8">
+                    A premium, professional design system built for MedStar facilities management. Every component crafted for executive-level polish with attention to detail, accessibility, and responsive behavior.
+                </p>
+                <div class="demo-row">
+                    <button class="btn btn-primary">Get Started</button>
+                    <button class="btn btn-secondary">View Docs</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color System -->
+        <section id="colors" class="demo-section">
+            <h2>Color Palette</h2>
+
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-accent mb-6">Primary Colors</h3>
+                <div class="grid-colors">
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #0f1219;"></div>
+                        <p class="color-name">Ultra Dark</p>
+                        <p class="color-code">#0f1219</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #1a2f4d;"></div>
+                        <p class="color-name">Deep Navy</p>
+                        <p class="color-code">#1a2f4d</p>
+                    </div>
+                    <div class="color-box" style="background: #1f2937;"></div>
+                        <p class="color-name">Card BG</p>
+                        <p class="color-code">#1f2937</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #2a3545;"></div>
+                        <p class="color-name">Hover</p>
+                        <p class="color-code">#2a3545</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-12">
+                <h3 class="text-xl font-semibold text-accent mb-6">Accent Colors</h3>
+                <div class="grid-colors">
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #d4a574;"></div>
+                        <p class="color-name">Gold</p>
+                        <p class="color-code">#d4a574</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #4a90e2;"></div>
+                        <p class="color-name">Blue</p>
+                        <p class="color-code">#4a90e2</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #27ae60;"></div>
+                        <p class="color-name">Success</p>
+                        <p class="color-code">#27ae60</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #e74c3c;"></div>
+                        <p class="color-name">Danger</p>
+                        <p class="color-code">#e74c3c</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-accent mb-6">Text Colors</h3>
+                <div class="grid-colors">
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #e8e8e8;"></div>
+                        <p class="color-name">Primary</p>
+                        <p class="color-code">#e8e8e8</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #9ca3af;"></div>
+                        <p class="color-name">Secondary</p>
+                        <p class="color-code">#9ca3af</p>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #6b7280;"></div>
+                        <p class="color-name">Muted</p>
+                        <p class="color-code">#6b7280</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section id="typography" class="demo-section">
+            <h2>Typography</h2>
+
+            <div class="typo-example">
+                <h1 class="mb-2">Heading 1</h1>
+                <p class="text-text-secondary">48px, Bold, System Sans-Serif</p>
+            </div>
+
+            <div class="typo-example">
+                <h2 class="mb-2">Heading 2</h2>
+                <p class="text-text-secondary">36px, Semibold, System Sans-Serif</p>
+            </div>
+
+            <div class="typo-example">
+                <h3 class="mb-2">Heading 3</h3>
+                <p class="text-text-secondary">28px, Semibold, System Sans-Serif</p>
+            </div>
+
+            <div class="typo-example">
+                <h4 class="mb-2">Heading 4</h4>
+                <p class="text-text-secondary">20px, Semibold, System Sans-Serif</p>
+            </div>
+
+            <div class="typo-example">
+                <p class="text-base">Body Text</p>
+                <p class="text-text-secondary">16px, Regular, System Sans-Serif, Line Height 1.5</p>
+            </div>
+
+            <div class="typo-example">
+                <p class="text-sm">Small Text</p>
+                <p class="text-text-secondary">14px, Regular, System Sans-Serif</p>
+            </div>
+
+            <div class="typo-example">
+                <code>Monospace Code</code>
+                <p class="text-text-secondary">14px, Fira Code or Monaco</p>
+            </div>
+        </section>
+
+        <!-- Buttons -->
+        <section id="buttons" class="demo-section">
+            <h2>Buttons</h2>
+
+            <h3 class="text-lg font-semibold text-accent mb-4">Primary Buttons</h3>
+            <div class="demo-row">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-4 mt-6">Secondary Buttons</h3>
+            <div class="demo-row">
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-secondary" disabled>Disabled</button>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-4 mt-6">Danger Buttons</h3>
+            <div class="demo-row">
+                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger" disabled>Disabled</button>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-4 mt-6">Sizes</h3>
+            <div class="demo-row">
+                <button class="btn btn-primary btn-sm">Small</button>
+                <button class="btn btn-primary">Regular</button>
+                <button class="btn btn-primary btn-lg">Large</button>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-4 mt-6">With Icons</h3>
+            <div class="demo-row">
+                <button class="btn btn-primary">
+                    <span>✓</span>
+                    Success
+                </button>
+                <button class="btn btn-secondary">
+                    <span>→</span>
+                    Next Step
+                </button>
+                <button class="btn btn-danger">
+                    <span>×</span>
+                    Cancel
+                </button>
+            </div>
+        </section>
+
+        <!-- Cards -->
+        <section id="components" class="demo-section">
+            <h2>Components</h2>
+
+            <h3 class="text-lg font-semibold text-accent mb-6">Cards</h3>
+            <div class="component-grid">
+                <div class="card card-base">
+                    <h4 class="text-accent mb-3">Basic Card</h4>
+                    <p class="text-text-secondary">Standard card with padding and subtle shadow. Perfect for content blocks.</p>
+                </div>
+                <div class="card card-base card-hover">
+                    <h4 class="text-accent mb-3">Hover Card</h4>
+                    <p class="text-text-secondary">Interactive card with elevation on hover effect.</p>
+                </div>
+                <div class="card card-base card-bordered">
+                    <h4 class="text-accent mb-3">Bordered Card</h4>
+                    <p class="text-text-secondary">Card with gold accent border for emphasis.</p>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Badges & Status</h3>
+            <div class="demo-row">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-success">Active</span>
+                <span class="badge badge-warning">Pending</span>
+                <span class="badge badge-danger">Error</span>
+            </div>
+            <div class="demo-row mt-6">
+                <span class="status-indicator status-active" title="Active"></span>
+                <span>Active</span>
+                <span class="status-indicator status-pending" title="Pending"></span>
+                <span>Pending</span>
+                <span class="status-indicator status-error" title="Error"></span>
+                <span>Error</span>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Alerts</h3>
+            <div class="space-y-4">
+                <div class="alert alert-success">
+                    <div class="alert-icon">✓</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Success!</div>
+                        <div class="alert-message">Your changes have been saved successfully.</div>
+                    </div>
+                </div>
+                <div class="alert alert-warning">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Warning</div>
+                        <div class="alert-message">This action cannot be undone.</div>
+                    </div>
+                </div>
+                <div class="alert alert-danger">
+                    <div class="alert-icon">×</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Error</div>
+                        <div class="alert-message">Something went wrong. Please try again.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Form Elements</h3>
+            <div class="max-w-md">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="input-base" placeholder="Enter your full name">
+                    <p class="form-hint">This will appear on all documents.</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="input-base" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="textarea" placeholder="Enter your message..."></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="agree">
+                        <label for="agree">I agree to the terms and conditions</label>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Tables</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Site</th>
+                            <th>Status</th>
+                            <th>Tasks</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Capitol Hill Medical Center</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>12</td>
+                            <td>2 hours ago</td>
+                        </tr>
+                        <tr>
+                            <td>Georgetown Hospital</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                            <td>8</td>
+                            <td>30 minutes ago</td>
+                        </tr>
+                        <tr>
+                            <td>Medstar Rehabilitation</td>
+                            <td><span class="badge badge-success">Active</span></td>
+                            <td>5</td>
+                            <td>Just now</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Loading States</h3>
+            <div class="demo-row gap-8">
+                <div class="flex-col-center gap-3">
+                    <div class="spinner"></div>
+                    <span class="text-sm text-text-secondary">Loading...</span>
+                </div>
+                <div class="flex-col-center gap-3">
+                    <div class="spinner spinner-lg"></div>
+                    <span class="text-sm text-text-secondary">Large Spinner</span>
+                </div>
+                <div>
+                    <div class="card card-base">
+                        <div class="skeleton skeleton-avatar mb-4"></div>
+                        <div class="skeleton skeleton-text mb-2"></div>
+                        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Avatars</h3>
+            <div class="demo-row gap-4">
+                <div class="avatar avatar-sm">JD</div>
+                <div class="avatar avatar-md">AB</div>
+                <div class="avatar avatar-lg">CD</div>
+                <div class="avatar avatar-xl">EF</div>
+            </div>
+
+            <h3 class="text-lg font-semibold text-accent mb-6 mt-12">Progress</h3>
+            <div class="max-w-md space-y-4">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 30%;"></div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 65%;"></div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Responsive Grid -->
+        <section class="demo-section">
+            <h2>Responsive Grid</h2>
+            <div class="grid-auto">
+                <div class="card card-base">
+                    <div class="status-indicator status-active"></div>
+                    <h4 class="text-accent mt-3 mb-2">Site 1</h4>
+                    <p class="text-text-secondary text-sm">Capitol Hill Medical</p>
+                </div>
+                <div class="card card-base">
+                    <div class="status-indicator status-active"></div>
+                    <h4 class="text-accent mt-3 mb-2">Site 2</h4>
+                    <p class="text-text-secondary text-sm">Georgetown Hospital</p>
+                </div>
+                <div class="card card-base">
+                    <div class="status-indicator status-pending"></div>
+                    <h4 class="text-accent mt-3 mb-2">Site 3</h4>
+                    <p class="text-text-secondary text-sm">Medstar Rehab</p>
+                </div>
+                <div class="card card-base">
+                    <div class="status-indicator status-error"></div>
+                    <h4 class="text-accent mt-3 mb-2">Site 4</h4>
+                    <p class="text-text-secondary text-sm">Arundel Hospital</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <section class="demo-section">
+            <h2>Empty States</h2>
+            <div class="card card-base">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-title">No Tasks Yet</div>
+                    <div class="empty-state-message">You're all caught up! Create a new task or assign one to get started.</div>
+                    <button class="btn btn-primary">Create Task</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animations -->
+        <section class="demo-section">
+            <h2>Animations</h2>
+            <p class="text-text-secondary mb-8">All components feature smooth 200-300ms transitions with professional easing functions. Hover over elements to see the effects.</p>
+            
+            <div class="component-grid">
+                <div class="card card-base card-hover">
+                    <p class="text-center text-text-secondary">Hover Lift</p>
+                    <p class="text-xs text-text-secondary text-center mt-2">Slight elevation on hover</p>
+                </div>
+                <div class="card card-base">
+                    <button class="btn btn-primary w-full">
+                        <span class="inline-block animate-bounce">↓</span>
+                        Bounce Animation
+                    </button>
+                </div>
+                <div class="card card-base">
+                    <div class="flex-center">
+                        <div class="spinner spinner-lg glow"></div>
+                    </div>
+                    <p class="text-center text-text-secondary text-sm mt-4">Gold Glow</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Design Principles -->
+        <section class="demo-section">
+            <h2>Design Principles</h2>
+            <div class="grid-auto">
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Executive Polish</h4>
+                    <p class="text-text-secondary text-sm">Professional aesthetic inspired by Fortune 500 enterprise platforms.</p>
+                </div>
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Dark Theme</h4>
+                    <p class="text-text-secondary text-sm">Deep navy and charcoal with gold accents for premium appearance.</p>
+                </div>
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Premium Spacing</h4>
+                    <p class="text-text-secondary text-sm">8px grid system with generous whitespace for breathing room.</p>
+                </div>
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Accessibility</h4>
+                    <p class="text-text-secondary text-sm">WCAG AAA compliant with high contrast and keyboard navigation.</p>
+                </div>
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Responsive Design</h4>
+                    <p class="text-text-secondary text-sm">Optimized for desktop, tablet, and mobile with intentional layouts.</p>
+                </div>
+                <div class="card card-base">
+                    <h4 class="text-accent mb-2">Smooth Transitions</h4>
+                    <p class="text-text-secondary text-sm">200-300ms animations with professional easing functions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Guide -->
+        <section class="demo-section">
+            <h2>Implementation Guide</h2>
+            <div class="space-y-8">
+                <div class="card card-base">
+                    <h4 class="text-accent mb-4">Getting Started</h4>
+                    <div class="code-block">
+&lt;link rel="stylesheet" href="css/tailwind.css"&gt;
+&lt;link rel="stylesheet" href="css/components.css"&gt;
+&lt;link rel="stylesheet" href="css/animations.css"&gt;
+
+&lt;!-- Import Tailwind fonts in your HTML head --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"&gt;
+                    </div>
+                </div>
+
+                <div class="card card-base">
+                    <h4 class="text-accent mb-4">Using Components</h4>
+                    <div class="code-block">
+&lt;!-- Primary Button --&gt;
+&lt;button class="btn btn-primary"&gt;Click Me&lt;/button&gt;
+
+&lt;!-- Card --&gt;
+&lt;div class="card card-base"&gt;
+    &lt;h4 class="text-accent"&gt;Title&lt;/h4&gt;
+    &lt;p class="text-text-secondary"&gt;Content&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Badge --&gt;
+&lt;span class="badge badge-success"&gt;Active&lt;/span&gt;
+                    </div>
+                </div>
+
+                <div class="card card-base">
+                    <h4 class="text-accent mb-4">Color Classes</h4>
+                    <div class="code-block">
+bg-primary-950          /* Ultra dark background */
+bg-primary-900          /* Primary background */
+text-accent             /* Gold text */
+text-text-primary       /* White text */
+text-text-secondary     /* Gray text */
+border-accent           /* Gold border */
+shadow-card             /* Card shadow */
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-border-DEFAULT mt-24 pt-12 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h5 class="font-semibold text-text-primary mb-4">EXECOS Pro</h5>
+                    <p class="text-text-secondary text-sm">Enterprise-grade design system for MedStar facilities management.</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-text-primary mb-4">Resources</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-accent hover:text-text-primary">Documentation</a></li>
+                        <li><a href="#" class="text-accent hover:text-text-primary">Component Library</a></li>
+                        <li><a href="#" class="text-accent hover:text-text-primary">Design Guidelines</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-text-primary mb-4">Pages</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="dashboard.html" class="text-accent hover:text-text-primary">Dashboard</a></li>
+                        <li><a href="email-intel.html" class="text-accent hover:text-text-primary">Email Intel</a></li>
+                        <li><a href="project-view.html" class="text-accent hover:text-text-primary">Projects</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-border-DEFAULT pt-6 text-center text-text-secondary text-sm">
+                <p>&copy; 2026 EXECOS Pro. All rights reserved. Built with premium design principles.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add animation class to elements when scrolled into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.demo-section, .component-grid').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

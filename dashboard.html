@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — EXECOS Pro</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, rgba(26, 47, 77, 0.5) 0%, rgba(31, 41, 55, 0.3) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 300ms ease-out;
+        }
+
+        .kpi-card:hover {
+            background: linear-gradient(135deg, rgba(26, 47, 77, 0.7) 0%, rgba(31, 41, 55, 0.5) 100%);
+            border-color: rgba(212, 165, 116, 0.3);
+            box-shadow: 0 20px 40px rgba(212, 165, 116, 0.1);
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #d4a574;
+            margin-bottom: 8px;
+        }
+
+        .kpi-change {
+            font-size: 12px;
+            color: #27ae60;
+        }
+
+        .kpi-change.negative {
+            color: #e74c3c;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border-bottom: 1px solid rgba(58, 58, 58, 0.5);
+            transition: background-color 200ms ease-out;
+        }
+
+        .activity-item:hover {
+            background-color: rgba(26, 47, 77, 0.3);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #d4a574 0%, transparent 100%);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -38px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d4a574;
+            border: 2px solid #0f1219;
+            box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1);
+        }
+
+        .site-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .site-card {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            transition: all 200ms ease-out;
+        }
+
+        .site-card:hover {
+            background: rgba(26, 47, 77, 0.5);
+            border-color: rgba(212, 165, 116, 0.2);
+        }
+
+        .site-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-primary-900 border-b border-border-DEFAULT backdrop-blur-md">
+        <div class="container flex-between py-4">
+            <div class="flex-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-lg flex-center font-bold text-primary-950">E</div>
+                <h1 class="text-xl font-bold text-text-primary">EXECOS Pro</h1>
+            </div>
+            <div class="flex-center gap-6">
+                <button class="text-text-secondary hover:text-accent transition-colors">🔔</button>
+                <button class="text-text-secondary hover:text-accent transition-colors">⚙️</button>
+                <div class="avatar avatar-sm">JD</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-12">
+        <!-- Welcome Section -->
+        <div class="mb-12">
+            <h2 class="text-4xl font-bold text-text-primary mb-2">Welcome back, John</h2>
+            <p class="text-text-secondary">Here's what's happening with your facilities today.</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Open Tasks</div>
+                <div class="kpi-value">24</div>
+                <div class="kpi-change negative">↑ 3 from yesterday</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Active Alerts</div>
+                <div class="kpi-value">7</div>
+                <div class="kpi-change">↓ 2 resolved</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Projects</div>
+                <div class="kpi-value">12</div>
+                <div class="kpi-change">On track</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Deadlines</div>
+                <div class="kpi-value">3</div>
+                <div class="kpi-change negative">Due this week</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Recent Activity -->
+            <div class="lg:col-span-2">
+                <div class="card card-base">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold text-text-primary">Recent Activity</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="activity-item">
+                            <div class="activity-icon">📧</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-text-primary">Email from Crothall</p>
+                                <p class="text-sm text-text-secondary">HVAC maintenance scheduled for Building A</p>
+                                <p class="text-xs text-text-secondary mt-1">2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">✓</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-text-primary">Task Completed</p>
+                                <p class="text-sm text-text-secondary">Electrical inspection at Capitol Hill Medical</p>
+                                <p class="text-xs text-text-secondary mt-1">4 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">⚠</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-text-primary">Alert</p>
+                                <p class="text-sm text-text-secondary">Temperature variance in Zone 3</p>
+                                <p class="text-xs text-text-secondary mt-1">6 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-text-primary">Report Generated</p>
+                                <p class="text-sm text-text-secondary">Monthly maintenance summary available</p>
+                                <p class="text-xs text-text-secondary mt-1">1 day ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div>
+                <div class="card card-base">
+                    <div class="card-header">
+                        <h3 class="text-xl font-semibold text-text-primary">Quick Actions</h3>
+                    </div>
+                    <div class="card-body space-y-3">
+                        <button class="btn btn-primary w-full justify-center">
+                            Create Task
+                        </button>
+                        <button class="btn btn-secondary w-full justify-center">
+                            New Project
+                        </button>
+                        <button class="btn btn-secondary w-full justify-center">
+                            Upload Contract
+                        </button>
+                        <button class="btn btn-secondary w-full justify-center">
+                            Schedule Meeting
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="card card-base mb-12">
+            <div class="card-header">
+                <h3 class="text-xl font-semibold text-text-primary">Upcoming Deadlines</h3>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div>
+                            <p class="font-medium text-text-primary">Electrical Safety Audit</p>
+                            <p class="text-sm text-text-secondary">Capitol Hill Medical Center</p>
+                            <p class="text-xs text-text-secondary mt-1">Due: June 10, 2026</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div>
+                            <p class="font-medium text-text-primary">HVAC Maintenance Contract Review</p>
+                            <p class="text-sm text-text-secondary">Georgetown Hospital</p>
+                            <p class="text-xs text-text-secondary mt-1">Due: June 15, 2026</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div>
+                            <p class="font-medium text-text-primary">Q2 Facilities Report</p>
+                            <p class="text-sm text-text-secondary">All Sites</p>
+                            <p class="text-xs text-text-secondary mt-1">Due: June 30, 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Site Status -->
+        <div class="card card-base">
+            <div class="card-header">
+                <h3 class="text-xl font-semibold text-text-primary">Facility Status Overview</h3>
+            </div>
+            <div class="card-body">
+                <div class="site-status-grid">
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-active"></span>
+                            <span class="text-sm font-medium">Active</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Capitol Hill</h4>
+                        <p class="text-xs text-text-secondary mt-1">Medical Center</p>
+                    </div>
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-active"></span>
+                            <span class="text-sm font-medium">Active</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Georgetown</h4>
+                        <p class="text-xs text-text-secondary mt-1">Hospital</p>
+                    </div>
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-pending"></span>
+                            <span class="text-sm font-medium">Pending</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Medstar</h4>
+                        <p class="text-xs text-text-secondary mt-1">Rehabilitation</p>
+                    </div>
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-active"></span>
+                            <span class="text-sm font-medium">Active</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Arundel</h4>
+                        <p class="text-xs text-text-secondary mt-1">Hospital</p>
+                    </div>
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-error"></span>
+                            <span class="text-sm font-medium">Alert</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Maryland</h4>
+                        <p class="text-xs text-text-secondary mt-1">Regional Center</p>
+                    </div>
+                    <div class="site-card">
+                        <div class="site-status">
+                            <span class="status-indicator status-active"></span>
+                            <span class="text-sm font-medium">Active</span>
+                        </div>
+                        <h4 class="font-semibold text-text-primary">Union Station</h4>
+                        <p class="text-xs text-text-secondary mt-1">Medical Clinic</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-border-DEFAULT mt-24 pt-12 pb-8">
+        <div class="container text-center text-text-secondary text-sm">
+            <p>&copy; 2026 EXECOS Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="css/animations.css"></script>
+</body>
+</html>

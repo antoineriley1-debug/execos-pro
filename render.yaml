@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: execos-pro
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://[PENDING]
+        scope: build
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: [PENDING]
+        scope: build
+      - key: ANTHROPIC_API_KEY
+        value: [PENDING]
+        scope: build
+      - key: NODE_ENV
+        value: production
+        scope: build

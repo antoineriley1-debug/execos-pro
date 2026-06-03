@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search — EXECOS Pro</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .search-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .search-input-wrapper {
+            max-width: 700px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 16px;
+            background: linear-gradient(135deg, rgba(26, 47, 77, 0.5) 0%, rgba(31, 41, 55, 0.3) 100%);
+            border: 2px solid rgba(212, 165, 116, 0.2);
+            border-radius: 12px;
+            color: #e8e8e8;
+            transition: all 300ms ease-out;
+        }
+
+        .search-input::placeholder {
+            color: #6b7280;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
+            background: linear-gradient(135deg, rgba(26, 47, 77, 0.7) 0%, rgba(31, 41, 55, 0.5) 100%);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 12px 24px;
+            background: #d4a574;
+            color: #1a2f4d;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+        }
+
+        .search-button:hover {
+            background: #c9a961;
+            box-shadow: 0 8px 16px rgba(212, 165, 116, 0.3);
+        }
+
+        .filters-sidebar {
+            position: sticky;
+            top: 120px;
+            width: 240px;
+            height: fit-content;
+        }
+
+        .filter-section {
+            margin-bottom: 24px;
+        }
+
+        .filter-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #d4a574;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: color 200ms ease-out;
+        }
+
+        .filter-option:hover {
+            color: #d4a574;
+        }
+
+        .filter-option input {
+            accent-color: #d4a574;
+            cursor: pointer;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .ai-answer {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.05) 0%, rgba(74, 144, 226, 0.05) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.15);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .ai-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #d4a574;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .ai-content {
+            font-size: 15px;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .ai-sources {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(212, 165, 116, 0.15);
+        }
+
+        .ai-sources-title {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .source-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .source-tag {
+            font-size: 11px;
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .result-item {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+        }
+
+        .result-item:hover {
+            background: rgba(26, 47, 77, 0.5);
+            border-color: rgba(212, 165, 116, 0.2);
+            box-shadow: 0 8px 16px rgba(212, 165, 116, 0.1);
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: #e8e8e8;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .result-description {
+            font-size: 13px;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .result-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+
+        .pagination-item {
+            padding: 8px 12px;
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 6px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+        }
+
+        .pagination-item:hover {
+            border-color: #d4a574;
+            color: #d4a574;
+        }
+
+        .pagination-item.active {
+            background: #d4a574;
+            border-color: #d4a574;
+            color: #1a2f4d;
+            font-weight: 600;
+        }
+
+        .search-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 32px;
+        }
+
+        .search-results {
+            flex: 1;
+        }
+
+        .results-header {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 1024px) {
+            .search-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-hero {
+                margin-bottom: 32px;
+            }
+
+            .filters-sidebar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-primary-900 border-b border-border-DEFAULT backdrop-blur-md">
+        <div class="container flex-between py-4">
+            <div class="flex-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-lg flex-center font-bold text-primary-950">E</div>
+                <h1 class="text-xl font-bold text-text-primary">EXECOS Pro</h1>
+            </div>
+            <div class="flex-center gap-6">
+                <button class="text-text-secondary hover:text-accent transition-colors">🔔</button>
+                <button class="text-text-secondary hover:text-accent transition-colors">⚙️</button>
+                <div class="avatar avatar-sm">JD</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-12">
+        <!-- Search Hero -->
+        <div class="search-hero">
+            <h2 class="text-4xl font-bold text-text-primary mb-4">Unified Search</h2>
+            <p class="text-text-secondary mb-8">Search across all your facilities management data with AI-powered insights</p>
+
+            <div class="search-input-wrapper">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search emails, projects, contracts, documents, tasks..."
+                    value="HVAC maintenance"
+                >
+                <button class="search-button">Search</button>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="search-container">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <div class="filter-title">Type</div>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>All Types</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Emails</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Projects</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Contracts</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Documents</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Tasks</span>
+                    </label>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Date</div>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Last 7 days</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Last 30 days</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Last year</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Any time</span>
+                    </label>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Site</div>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Capitol Hill</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>Georgetown</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Medstar Rehab</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Arundel</span>
+                    </label>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Status</div>
+                    <label class="filter-option">
+                        <input type="checkbox" checked>
+                        <span>All Statuses</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Open</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>In Progress</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox">
+                        <span>Closed</span>
+                    </label>
+                </div>
+            </aside>
+
+            <!-- Results -->
+            <div class="search-results">
+                <!-- AI Answer -->
+                <div class="ai-answer">
+                    <div class="ai-label">
+                        <span>🤖</span>
+                        <span>AI Answer</span>
+                    </div>
+                    <div class="ai-content">
+                        <p>HVAC maintenance across MedStar facilities is managed through multiple ongoing projects. The primary Capitol Hill Medical Center HVAC Modernization project is 65% complete, with system integration currently in progress. Crothall Services is the main contractor, and a BACnet control system integration is underway. Regular maintenance contracts are also in place with Schneider Climate Solutions ($185,000) for equipment support.</p>
+                        
+                        <div class="ai-sources">
+                            <div class="ai-sources-title">Source Documents</div>
+                            <div class="source-list">
+                                <span class="source-tag">Capitol Hill Project</span>
+                                <span class="source-tag">Crothall Email</span>
+                                <span class="source-tag">SCS Contract</span>
+                                <span class="source-tag">Project Overview</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Header -->
+                <div class="results-header">
+                    <h3 class="text-lg font-semibold text-text-primary">Results</h3>
+                    <span class="results-count">Showing 1-6 of 42 results</span>
+                </div>
+
+                <!-- Result Items -->
+                <div class="results-grid">
+                    <div class="result-item">
+                        <div class="result-type">📧 Email</div>
+                        <div class="result-title">HVAC Maintenance Schedule Update</div>
+                        <div class="result-description">
+                            Hi team, I wanted to follow up on the HVAC maintenance schedule we discussed last week. The proposed timeline works well for Capitol Hill Medical...
+                        </div>
+                        <div class="result-meta">
+                            <span>From: john.crothall@crothall.com</span>
+                            <span>June 2, 2026</span>
+                            <span class="badge badge-warning">Pending</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-type">📋 Project</div>
+                        <div class="result-title">Capitol Hill Medical HVAC Modernization</div>
+                        <div class="result-description">
+                            Complete replacement and modernization of the HVAC system at Capitol Hill Medical Center. Includes equipment installation, control system integration...
+                        </div>
+                        <div class="result-meta">
+                            <span>Status: In Progress (65%)</span>
+                            <span>Due: July 15, 2026</span>
+                            <span class="badge badge-success">On Track</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-type">📄 Contract</div>
+                        <div class="result-title">HVAC Equipment Supply & Installation Agreement</div>
+                        <div class="result-description">
+                            Primary equipment and installation contract with Schneider Climate Solutions. Covers all HVAC units, ductwork, sensors, and related equipment...
+                        </div>
+                        <div class="result-meta">
+                            <span>Vendor: Schneider Climate Solutions</span>
+                            <span>Value: $185,000</span>
+                            <span class="badge badge-success">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-type">📧 Email</div>
+                        <div class="result-title">Control System Integration Issue</div>
+                        <div class="result-description">
+                            Discussion regarding BACnet compatibility issue discovered during integration testing. Vendor patch has been requested...
+                        </div>
+                        <div class="result-meta">
+                            <span>From: john.crothall@crothall.com</span>
+                            <span>June 1, 2026</span>
+                            <span class="badge badge-danger">High Priority</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-type">📑 Document</div>
+                        <div class="result-title">System Design & Specifications</div>
+                        <div class="result-description">
+                            Complete technical specifications including zone diagrams, equipment parameters, control logic, and performance targets for the Capitol Hill HVAC system.
+                        </div>
+                        <div class="result-meta">
+                            <span>PDF, 2.4 MB</span>
+                            <span>Updated: May 15, 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-type">📋 Task</div>
+                        <div class="result-title">Resolve Control System Integration</div>
+                        <div class="result-description">
+                            BACnet integration testing revealed compatibility issue with zone controller firmware. Vendor patch requested and awaiting response.
+                        </div>
+                        <div class="result-meta">
+                            <span>Project: Capitol Hill HVAC</span>
+                            <span>Due: June 8, 2026</span>
+                            <span class="badge badge-danger">Critical</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="pagination-item">←</div>
+                    <div class="pagination-item active">1</div>
+                    <div class="pagination-item">2</div>
+                    <div class="pagination-item">3</div>
+                    <div class="pagination-item">4</div>
+                    <div class="pagination-item">5</div>
+                    <div class="pagination-item">→</div>
+                </div>
+
+                <!-- Search Tips -->
+                <div class="card card-base mt-12">
+                    <div class="card-header">
+                        <h4 class="font-semibold text-text-primary">💡 Search Tips</h4>
+                    </div>
+                    <div class="card-body text-text-secondary text-sm space-y-2">
+                        <p><strong>"phrase search"</strong> — Search for exact phrase by using quotes</p>
+                        <p><strong>-exclude</strong> — Use minus sign to exclude words from results</p>
+                        <p><strong>type:email</strong> — Filter by document type (email, project, contract, document, task)</p>
+                        <p><strong>site:capitol-hill</strong> — Filter results by specific facility</p>
+                        <p><strong>status:open</strong> — Filter by status (open, in-progress, closed, pending)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-border-DEFAULT mt-24 pt-12 pb-8">
+        <div class="container text-center text-text-secondary text-sm">
+            <p>&copy; 2026 EXECOS Pro. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — EXECOS Pro</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .settings-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            max-width: 1200px;
+        }
+
+        .settings-nav {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .settings-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            border-left: 3px solid transparent;
+        }
+
+        .settings-nav-item:hover {
+            color: #e8e8e8;
+            background: rgba(26, 47, 77, 0.3);
+        }
+
+        .settings-nav-item.active {
+            color: #d4a574;
+            background: rgba(212, 165, 116, 0.1);
+            border-left-color: #d4a574;
+        }
+
+        .settings-content {
+            display: none;
+        }
+
+        .settings-content.active {
+            display: block;
+            animation: fadeIn 200ms ease-out;
+        }
+
+        .settings-section {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .settings-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e8e8e8;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .setting-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(58, 58, 58, 0.5);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .setting-label {
+            flex: 1;
+        }
+
+        .setting-name {
+            font-weight: 500;
+            color: #e8e8e8;
+            margin-bottom: 4px;
+        }
+
+        .setting-description {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: rgba(58, 58, 58, 0.5);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 200ms ease-out;
+        }
+
+        .toggle-switch.active {
+            background: #27ae60;
+        }
+
+        .toggle-switch-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 12px;
+            transition: left 200ms ease-out;
+        }
+
+        .toggle-switch.active .toggle-switch-knob {
+            left: 22px;
+        }
+
+        .select-input {
+            padding: 8px 12px;
+            background: rgba(26, 47, 77, 0.5);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 6px;
+            color: #e8e8e8;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+        }
+
+        .select-input:hover {
+            border-color: rgba(212, 165, 116, 0.3);
+        }
+
+        .select-input:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(58, 58, 58, 0.5);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .danger-zone {
+            background: rgba(231, 76, 60, 0.05);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .danger-zone-title {
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 12px;
+        }
+
+        .danger-zone-description {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .settings-container {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-nav {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 8px;
+                margin-bottom: 32px;
+            }
+
+            .settings-nav-item {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .settings-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .setting-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-primary-900 border-b border-border-DEFAULT backdrop-blur-md">
+        <div class="container flex-between py-4">
+            <div class="flex-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-lg flex-center font-bold text-primary-950">E</div>
+                <h1 class="text-xl font-bold text-text-primary">EXECOS Pro</h1>
+            </div>
+            <div class="flex-center gap-6">
+                <button class="text-text-secondary hover:text-accent transition-colors">🔔</button>
+                <button class="text-text-secondary hover:text-accent transition-colors">⚙️</button>
+                <div class="avatar avatar-sm">JD</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-12">
+        <div class="mb-8">
+            <h2 class="text-4xl font-bold text-text-primary mb-2">Settings</h2>
+            <p class="text-text-secondary">Manage your EXECOS Pro account and preferences</p>
+        </div>
+
+        <!-- Settings Container -->
+        <div class="settings-container">
+            <!-- Sidebar Navigation -->
+            <nav class="settings-nav">
+                <div class="settings-nav-item active" onclick="switchSettings(event, 'account')">
+                    <span>👤</span>
+                    <span>Account</span>
+                </div>
+                <div class="settings-nav-item" onclick="switchSettings(event, 'notifications')">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                </div>
+                <div class="settings-nav-item" onclick="switchSettings(event, 'appearance')">
+                    <span>🎨</span>
+                    <span>Appearance</span>
+                </div>
+                <div class="settings-nav-item" onclick="switchSettings(event, 'integrations')">
+                    <span>🔗</span>
+                    <span>Integrations</span>
+                </div>
+                <div class="settings-nav-item" onclick="switchSettings(event, 'security')">
+                    <span>🔒</span>
+                    <span>Security</span>
+                </div>
+                <div class="settings-nav-item" onclick="switchSettings(event, 'privacy')">
+                    <span>👁️</span>
+                    <span>Privacy</span>
+                </div>
+            </nav>
+
+            <!-- Settings Content -->
+            <div class="settings-content-wrapper">
+                <!-- Account Settings -->
+                <div id="account" class="settings-content active">
+                    <div class="settings-section">
+                        <div class="settings-section-title">👤 Profile Information</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Full Name</div>
+                                <div class="setting-description">Your name as it appears in the system</div>
+                            </div>
+                            <input type="text" class="input-base" style="max-width: 300px;" value="John Doe">
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Email Address</div>
+                                <div class="setting-description">Primary email for login and notifications</div>
+                            </div>
+                            <input type="email" class="input-base" style="max-width: 300px;" value="john@medstar.com">
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Title/Role</div>
+                                <div class="setting-description">Your position or role</div>
+                            </div>
+                            <input type="text" class="input-base" style="max-width: 300px;" value="Facilities Manager">
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Organization</div>
+                                <div class="setting-description">Associated hospital or facility</div>
+                            </div>
+                            <input type="text" class="input-base" style="max-width: 300px;" value="Capitol Hill Medical Center">
+                        </div>
+
+                        <div style="margin-top: 24px; display: flex; gap: 12px;">
+                            <button class="btn btn-primary">Save Changes</button>
+                            <button class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">🔐 Password</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Change Password</div>
+                                <div class="setting-description">Update your login password</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Change</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Last Changed</div>
+                                <div class="setting-description">Password was updated on May 15, 2026</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">📱 Two-Factor Authentication</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Enable 2FA</div>
+                                <div class="setting-description">Add extra security to your account</div>
+                            </div>
+                            <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <p class="text-text-secondary text-sm mt-4">Two-factor authentication adds an additional layer of security by requiring a code from your phone in addition to your password.</p>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div id="notifications" class="settings-content">
+                    <div class="settings-section">
+                        <div class="settings-section-title">🔔 Email Notifications</div>
+
+                        <div class="notification-item">
+                            <div class="setting-label">
+                                <div class="setting-name">New Task Assignment</div>
+                                <div class="setting-description">Receive email when assigned a new task</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Project Updates</div>
+                                <div class="setting-description">Daily digest of project status changes</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Contract Alerts</div>
+                                <div class="setting-description">Receive alerts for expiring or critical contracts</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Weekly Summary</div>
+                                <div class="setting-description">Receive weekly summary email</div>
+                            </div>
+                            <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Marketing Emails</div>
+                                <div class="setting-description">Receive announcements and product updates</div>
+                            </div>
+                            <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">⏰ Notification Frequency</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Email Digest</div>
+                                <div class="setting-description">How often you receive combined emails</div>
+                            </div>
+                            <select class="select-input">
+                                <option>Immediate</option>
+                                <option>Daily</option>
+                                <option selected>Weekly</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Quiet Hours</div>
+                                <div class="setting-description">Don't send notifications during these hours</div>
+                            </div>
+                            <input type="text" class="input-base" style="max-width: 200px;" value="10:00 PM - 8:00 AM">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div id="appearance" class="settings-content">
+                    <div class="settings-section">
+                        <div class="settings-section-title">🎨 Theme</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Color Scheme</div>
+                                <div class="setting-description">Choose your preferred theme</div>
+                            </div>
+                            <select class="select-input">
+                                <option selected>Dark (Default)</option>
+                                <option>Light</option>
+                                <option>Auto (System)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Accent Color</div>
+                                <div class="setting-description">Primary accent color</div>
+                            </div>
+                            <select class="select-input">
+                                <option selected>Gold (#d4a574)</option>
+                                <option>Blue (#4a90e2)</option>
+                                <option>Green (#27ae60)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">📐 Display</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Compact Mode</div>
+                                <div class="setting-description">Use tighter spacing and smaller text</div>
+                            </div>
+                            <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Sidebar Position</div>
+                                <div class="setting-description">Choose sidebar behavior</div>
+                            </div>
+                            <select class="select-input">
+                                <option selected>Auto-collapse</option>
+                                <option>Always Expanded</option>
+                                <option>Always Collapsed</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Animations</div>
+                                <div class="setting-description">Enable smooth transitions and animations</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations -->
+                <div id="integrations" class="settings-content">
+                    <div class="settings-section">
+                        <div class="settings-section-title">🔗 Connected Services</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Gmail</div>
+                                <div class="setting-description">Connected as john@medstar.com</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Disconnect</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Slack</div>
+                                <div class="setting-description">Not connected</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Connect</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Microsoft 365</div>
+                                <div class="setting-description">Not connected</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Connect</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">🔑 API Keys</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">API Access</div>
+                                <div class="setting-description">Generate API key for integrations</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Generate Key</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div id="security" class="settings-content">
+                    <div class="settings-section">
+                        <div class="settings-section-title">🔒 Active Sessions</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Windows 11 - Chrome</div>
+                                <div class="setting-description">Last active: Just now</div>
+                            </div>
+                            <span class="badge badge-success">Current</span>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">iPhone 13 - Safari</div>
+                                <div class="setting-description">Last active: 2 hours ago</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Sign Out</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">iPad - Chrome</div>
+                                <div class="setting-description">Last active: 1 day ago</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Sign Out</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">🛡️ Login Activity</div>
+
+                        <p class="text-text-secondary text-sm mb-4">Recent login activity from your account</p>
+
+                        <div class="text-sm space-y-2">
+                            <div class="flex justify-between">
+                                <span>June 2, 2026 - 2:45 PM</span>
+                                <span class="text-text-secondary">Windows 11 - Chrome</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>June 1, 2026 - 9:30 AM</span>
+                                <span class="text-text-secondary">iPhone 13 - Safari</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>May 31, 2026 - 4:15 PM</span>
+                                <span class="text-text-secondary">Windows 11 - Chrome</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy -->
+                <div id="privacy" class="settings-content">
+                    <div class="settings-section">
+                        <div class="settings-section-title">👁️ Data & Privacy</div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Data Collection</div>
+                                <div class="setting-description">Allow us to collect usage data for improvements</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <div class="setting-name">Activity Logging</div>
+                                <div class="setting-description">Log my activity for audit and compliance</div>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                                <div class="toggle-switch-knob"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">📥 Data Export</div>
+
+                        <p class="text-text-secondary text-sm mb-4">Download your personal data in standard format</p>
+
+                        <button class="btn btn-secondary">Export My Data</button>
+                    </div>
+
+                    <div class="danger-zone">
+                        <div class="danger-zone-title">⚠️ Danger Zone</div>
+                        <div class="danger-zone-description">
+                            Permanently delete your account and all associated data. This action cannot be undone.
+                        </div>
+                        <button class="btn btn-danger">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-border-DEFAULT mt-24 pt-12 pb-8">
+        <div class="container text-center text-text-secondary text-sm">
+            <p>&copy; 2026 EXECOS Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchSettings(event, settingName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.settings-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.settings-nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected content
+            document.getElementById(settingName).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

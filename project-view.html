@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project View — EXECOS Pro</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .project-header {
+            background: linear-gradient(135deg, rgba(26, 47, 77, 0.5) 0%, rgba(31, 41, 55, 0.3) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .project-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .project-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .project-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e8e8e8;
+        }
+
+        .tabs-container {
+            display: flex;
+            border-bottom: 2px solid rgba(58, 58, 58, 0.5);
+            margin-bottom: 32px;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-nav-item {
+            padding: 16px 24px;
+            color: #9ca3af;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            position: relative;
+        }
+
+        .tab-nav-item:hover {
+            color: #e8e8e8;
+        }
+
+        .tab-nav-item.active {
+            color: #d4a574;
+            border-bottom-color: #d4a574;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 200ms ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .item-card {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 200ms ease-out;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .item-card:hover {
+            background: rgba(26, 47, 77, 0.5);
+            border-color: rgba(212, 165, 116, 0.2);
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #e8e8e8;
+            margin-bottom: 4px;
+        }
+
+        .item-description {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .contact-card {
+            background: rgba(26, 47, 77, 0.3);
+            border: 1px solid rgba(58, 58, 58, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .contact-avatar {
+            display: inline-flex;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(212, 165, 116, 0.1);
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #d4a574;
+            margin-bottom: 12px;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: #e8e8e8;
+            margin-bottom: 4px;
+        }
+
+        .contact-role {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .contact-email {
+            font-size: 12px;
+            color: #d4a574;
+            word-break: break-all;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #d4a574;
+            border: 2px solid #0f1219;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .timeline-text {
+            color: #e8e8e8;
+            margin-top: 4px;
+        }
+
+        .ai-summary {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.05) 0%, rgba(74, 144, 226, 0.05) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .ai-label {
+            font-size: 12px;
+            color: #d4a574;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .ai-text {
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .project-header {
+                padding: 20px;
+            }
+
+            .tabs-container {
+                overflow-x: auto;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="sticky top-0 z-40 bg-primary-900 border-b border-border-DEFAULT backdrop-blur-md">
+        <div class="container flex-between py-4">
+            <div class="flex-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-lg flex-center font-bold text-primary-950">E</div>
+                <h1 class="text-xl font-bold text-text-primary">EXECOS Pro</h1>
+            </div>
+            <div class="flex-center gap-6">
+                <button class="text-text-secondary hover:text-accent transition-colors">🔔</button>
+                <button class="text-text-secondary hover:text-accent transition-colors">⚙️</button>
+                <div class="avatar avatar-sm">JD</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-12">
+        <!-- Project Header -->
+        <div class="project-header">
+            <div class="project-title">
+                <h2 class="text-4xl font-bold text-text-primary">Capitol Hill Medical HVAC Modernization</h2>
+            </div>
+            <div class="flex gap-3">
+                <span class="badge badge-success">On Track</span>
+                <span class="badge badge-secondary">Priority: High</span>
+            </div>
+            <div class="project-meta">
+                <div class="project-meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value">In Progress</span>
+                </div>
+                <div class="project-meta-item">
+                    <span class="meta-label">Deadline</span>
+                    <span class="meta-value">July 15, 2026</span>
+                </div>
+                <div class="project-meta-item">
+                    <span class="meta-label">Team Lead</span>
+                    <span class="meta-value">John Crothall</span>
+                </div>
+                <div class="project-meta-item">
+                    <span class="meta-label">Budget</span>
+                    <span class="meta-value">$285,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <div class="tab-nav">
+                <div class="tab-nav-item active" onclick="switchTab(event, 'overview')">Overview</div>
+                <div class="tab-nav-item" onclick="switchTab(event, 'emails')">Emails</div>
+                <div class="tab-nav-item" onclick="switchTab(event, 'contracts')">Contracts</div>
+                <div class="tab-nav-item" onclick="switchTab(event, 'documents')">Documents</div>
+                <div class="tab-nav-item" onclick="switchTab(event, 'timeline')">Timeline</div>
+                <div class="tab-nav-item" onclick="switchTab(event, 'contacts')">Contacts</div>
+            </div>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- AI Summary -->
+            <div class="ai-summary">
+                <div class="ai-label">📊 AI Project Summary</div>
+                <div class="ai-text">
+                    The Capitol Hill Medical Center HVAC modernization project is progressing on schedule with 65% completion. All major equipment has been installed, and testing phases are underway. Budget remains within 8% of allocation. Key milestones remaining: final system integration (2 weeks), user training (1 week), and go-live validation.
+                </div>
+            </div>
+
+            <!-- Open Items -->
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Open Items & Action Items</h3>
+            
+            <div class="item-card">
+                <div class="item-icon">⚠️</div>
+                <div class="item-content">
+                    <div class="item-title">Resolve Control System Integration</div>
+                    <div class="item-description">BACnet integration testing revealed compatibility issue with zone controller firmware. Vendor patch requested.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-danger">High Priority</span>
+                        <span class="badge badge-warning">In Progress</span>
+                        <span>Due: June 8</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📋</div>
+                <div class="item-content">
+                    <div class="item-title">Schedule User Training Session</div>
+                    <div class="item-description">Coordinate with Hospital Operations team to schedule 3-day training for HVAC technicians.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-secondary">Medium Priority</span>
+                        <span class="badge badge-warning">Pending</span>
+                        <span>Due: June 15</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">✓</div>
+                <div class="item-content">
+                    <div class="item-title">Complete Equipment Installation</div>
+                    <div class="item-description">All HVAC units, ductwork, and sensors have been physically installed and connected.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-success">Completed</span>
+                        <span>Completed: May 30</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">🔧</div>
+                <div class="item-content">
+                    <div class="item-title">Perform System Commissioning</div>
+                    <div class="item-description">Full system startup, calibration, and performance validation testing across all zones.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-secondary">Medium Priority</span>
+                        <span class="badge badge-secondary">Not Started</span>
+                        <span>Due: June 25</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emails Tab -->
+        <div id="emails" class="tab-content">
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Related Emails</h3>
+            
+            <div class="item-card">
+                <div class="item-icon">📧</div>
+                <div class="item-content">
+                    <div class="item-title">HVAC Equipment Delivery Confirmation</div>
+                    <div class="item-description">Final shipment of zone controllers and damper units arrived and verified.</div>
+                    <div class="item-meta">
+                        <span>From: vendor@hvac-systems.com</span>
+                        <span>May 25, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📧</div>
+                <div class="item-content">
+                    <div class="item-title">Control System Integration Issue</div>
+                    <div class="item-description">Discussion of BACnet compatibility issue and next steps for resolution.</div>
+                    <div class="item-meta">
+                        <span>From: john.crothall@crothall.com</span>
+                        <span>June 2, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📧</div>
+                <div class="item-content">
+                    <div class="item-title">Monthly Progress Report — May</div>
+                    <div class="item-description">Comprehensive update on project status, milestones achieved, and upcoming work.</div>
+                    <div class="item-meta">
+                        <span>From: project@capitol-medical.com</span>
+                        <span>May 31, 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contracts Tab -->
+        <div id="contracts" class="tab-content">
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Related Contracts</h3>
+            
+            <div class="item-card">
+                <div class="item-icon">📄</div>
+                <div class="item-content">
+                    <div class="item-title">HVAC Equipment Supply & Installation Agreement</div>
+                    <div class="item-description">Primary equipment and installation contract with Schneider Climate Solutions.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-success">Active</span>
+                        <span>Value: $185,000</span>
+                        <span>Expires: Dec 31, 2027</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📄</div>
+                <div class="item-content">
+                    <div class="item-title">Control System Integration Services</div>
+                    <div class="item-description">BACnet integration and system programming contract with AutomationTech.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-success">Active</span>
+                        <span>Value: $45,000</span>
+                        <span>Expires: Aug 30, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📄</div>
+                <div class="item-content">
+                    <div class="item-title">Maintenance & Support Agreement</div>
+                    <div class="item-description">3-year post-implementation maintenance and technical support.</div>
+                    <div class="item-meta">
+                        <span class="badge badge-secondary">Pending</span>
+                        <span>Value: $55,000</span>
+                        <span>Effective: Aug 1, 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Tab -->
+        <div id="documents" class="tab-content">
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Project Documents</h3>
+            
+            <div class="item-card">
+                <div class="item-icon">📑</div>
+                <div class="item-content">
+                    <div class="item-title">System Design & Specifications</div>
+                    <div class="item-description">Complete technical specifications, zone diagrams, and equipment parameters.</div>
+                    <div class="item-meta">
+                        <span>PDF, 2.4 MB</span>
+                        <span>Updated: May 15, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📑</div>
+                <div class="item-content">
+                    <div class="item-title">Installation & Commissioning Plan</div>
+                    <div class="item-description">Detailed phased rollout plan with timeline and resource allocation.</div>
+                    <div class="item-meta">
+                        <span>PDF, 1.8 MB</span>
+                        <span>Created: April 20, 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-icon">📑</div>
+                <div class="item-content">
+                    <div class="item-title">Budget & Cost Tracking Sheet</div>
+                    <div class="item-description">Real-time budget allocation, actual spend, and cost variance analysis.</div>
+                    <div class="item-meta">
+                        <span>Excel, 0.3 MB</span>
+                        <span>Updated: June 2, 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content">
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Project Timeline</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">April 1, 2026</div>
+                    <div class="timeline-text">Project Kickoff & Team Assembly</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">April 15 - May 20, 2026</div>
+                    <div class="timeline-text">Equipment Procurement & Delivery</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">May 15 - May 30, 2026</div>
+                    <div class="timeline-text">Physical Installation & Ductwork (Complete ✓)</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">June 1 - June 20, 2026</div>
+                    <div class="timeline-text">System Integration & Testing (In Progress)</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">June 21 - July 5, 2026</div>
+                    <div class="timeline-text">User Training & Documentation</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">July 15, 2026</div>
+                    <div class="timeline-text">Go-Live & Final Validation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts Tab -->
+        <div id="contacts" class="tab-content">
+            <h3 class="text-2xl font-semibold text-text-primary mb-6">Project Contacts</h3>
+            
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-avatar">JC</div>
+                    <div class="contact-name">John Crothall</div>
+                    <div class="contact-role">Project Lead</div>
+                    <div class="contact-email">john.crothall@crothall.com</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-avatar">MB</div>
+                    <div class="contact-name">Mike Bennett</div>
+                    <div class="contact-role">Installation Lead</div>
+                    <div class="contact-email">m.bennett@crothall.com</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-avatar">SR</div>
+                    <div class="contact-name">Sarah Rodriguez</div>
+                    <div class="contact-role">Hospital Operations</div>
+                    <div class="contact-email">s.rodriguez@capitol-medical.com</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-avatar">DT</div>
+                    <div class="contact-name">David Torres</div>
+                    <div class="contact-role">Controls Engineer</div>
+                    <div class="contact-email">d.torres@automationtech.com</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-border-DEFAULT mt-24 pt-12 pb-8">
+        <div class="container text-center text-text-secondary text-sm">
+            <p>&copy; 2026 EXECOS Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(event, tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.tab-nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
