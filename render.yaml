@@ -6,15 +6,18 @@ services:
     startCommand: npm start
     plan: free
     envVars:
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        value: https://[PENDING]
-        scope: build
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        value: [PENDING]
-        scope: build
-      - key: ANTHROPIC_API_KEY
-        value: [PENDING]
-        scope: build
       - key: NODE_ENV
         value: production
+        scope: build
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        fromEnv: NEXT_PUBLIC_SUPABASE_URL
+        scope: build
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        fromEnv: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        scope: build
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromEnv: SUPABASE_SERVICE_ROLE_KEY
+        scope: build
+      - key: ANTHROPIC_API_KEY
+        fromEnv: ANTHROPIC_API_KEY
         scope: build
