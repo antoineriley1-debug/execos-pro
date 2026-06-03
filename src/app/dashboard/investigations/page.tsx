@@ -6,7 +6,7 @@ import { EmailImportPanel } from '@/components/EmailImportPanel'
 import { InvestigationJobCard } from '@/components/InvestigationJobCard'
 import { InvestigationResults } from '@/components/InvestigationResults'
 import { InvestigationExport } from '@/components/InvestigationExport'
-import type { InvestigationJob, Finding } from '@/types/investigations'
+import type { InvestigationJob } from '@/types/investigations'
 
 export default function InvestigationsPage() {
   const [jobs, setJobs] = useState<InvestigationJob[]>([])

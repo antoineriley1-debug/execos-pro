@@ -116,14 +116,18 @@ export function formatDataForSynthesis(
   const estimatedTokens = JSON.stringify(data).length / 4
 
   const dataPoints = Object.entries(data)
-    .map(([key, value]) => ({
-      key,
-      value,
-      confidence:
-        typeof value === 'object' && value !== null && 'confidence' in value
-          ? (value as Record<string, unknown>).confidence || 0.8
-          : 0.8,
-    }))
+    .map(([key, value]) => {
+      let confidence: number = 0.8
+      if (typeof value === 'object' && value !== null && 'confidence' in value) {
+        const confVal = (value as Record<string, unknown>).confidence
+        confidence = typeof confVal === 'number' ? confVal : 0.8
+      }
+      return {
+        key,
+        value,
+        confidence,
+      }
+    })
     .sort((a, b) => b.confidence - a.confidence)
     .slice(0, Math.ceil(maxTokens / 100)) // Limit data points
 
@@ -133,7 +137,7 @@ export function formatDataForSynthesis(
 
   return {
     summary,
-    dataPoints,
+    dataPoints: dataPoints as any,
     timestamp: new Date().toISOString(),
     metadata: {
       totalDataPoints: Object.keys(data).length,

@@ -47,16 +47,13 @@ const mockFindings: Finding[] = [
 ]
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { jobId: string } }
+  request: NextRequest
 ) {
   try {
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    const { jobId } = params
 
     const avgRisk = Math.round(
       mockFindings.reduce((sum, f) => sum + f.riskScore, 0) / mockFindings.length

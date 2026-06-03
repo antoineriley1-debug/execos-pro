@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import type { InvestigationJob, Finding, RiskLevel } from '@/types/investigations'
+import type { InvestigationJob, RiskLevel } from '@/types/investigations'
 
 interface InvestigationResultsProps {
   job: InvestigationJob

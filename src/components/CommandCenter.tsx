@@ -143,14 +143,14 @@ export function CommandCenter({ siteId, userId }: CommandCenterProps) {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-red-50 p-4 rounded border border-red-200">
             <p className="text-2xl font-bold text-red-600">
-              {data?.widgets.attentionNeeded.overdueItems.length || 0}
+              {data?.widgets?.attentionNeeded?.overdueItems?.length || 0}
             </p>
             <p className="text-sm text-red-700">Overdue Items</p>
           </div>
 
           <div className="bg-yellow-50 p-4 rounded border border-yellow-200">
             <p className="text-2xl font-bold text-yellow-600">
-              {data?.widgets.attentionNeeded.upcomingDeadlines.length || 0}
+              {data?.widgets?.attentionNeeded?.upcomingDeadlines?.length || 0}
             </p>
             <p className="text-sm text-yellow-700">Upcoming Deadlines</p>
           </div>
@@ -171,7 +171,7 @@ export function CommandCenter({ siteId, userId }: CommandCenterProps) {
 
           <div className="bg-purple-50 p-4 rounded border border-purple-200">
             <p className="text-2xl font-bold text-purple-600">
-              {data?.widgets.attentionNeeded.failedFollowUps.length || 0}
+              {data?.widgets?.attentionNeeded?.failedFollowUps?.length || 0}
             </p>
             <p className="text-sm text-purple-700">Follow-ups Needed</p>
           </div>
@@ -185,7 +185,7 @@ export function CommandCenter({ siteId, userId }: CommandCenterProps) {
         </div>
 
         {/* Overdue Items List */}
-        {data?.widgets.attentionNeeded.overdueItems.length > 0 && (
+        {data?.widgets?.attentionNeeded?.overdueItems && data.widgets.attentionNeeded.overdueItems.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-200">
             <h4 className="font-semibold text-red-900 mb-3">Overdue Items</h4>
             <div className="space-y-2">
@@ -201,7 +201,7 @@ export function CommandCenter({ siteId, userId }: CommandCenterProps) {
       </div>
 
       {/* Vendor Intelligence */}
-      {data?.widgets.vendorIntelligence.vendors.length > 0 && (
+      {data?.widgets?.vendorIntelligence?.vendors && data.widgets.vendorIntelligence.vendors.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">👥 Vendor Intelligence</h3>
 
@@ -248,7 +248,7 @@ export function CommandCenter({ siteId, userId }: CommandCenterProps) {
       )}
 
       {/* AI Insights */}
-      {data?.widgets.aiInsights.observations.length > 0 && (
+      {data?.widgets?.aiInsights?.observations?.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">💡 AI Insights & Patterns</h3>
 

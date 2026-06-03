@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, FileText, Download, Loader } from 'lucide-react'
+import { X, Download, Loader } from 'lucide-react'
 
 interface EmailExportDialogProps {
   emailId: string

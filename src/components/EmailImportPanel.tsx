@@ -9,7 +9,7 @@ interface EmailImportPanelProps {
 
 export function EmailImportPanel({
   onMergeWithFiles,
-  onCreateSeparateJob,
+  onCreateSeparateJob: _onCreateSeparateJob,
 }: EmailImportPanelProps) {
   const [emailText, setEmailText] = useState('')
   const [emailFiles, setEmailFiles] = useState<File[]>([])
@@ -47,7 +47,7 @@ export function EmailImportPanel({
     setEmailText('')
   }
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'eml' | 'msg') => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, _type: 'eml' | 'msg') => {
     const files = e.target.files
     if (files) {
       const selected = Array.from(files)

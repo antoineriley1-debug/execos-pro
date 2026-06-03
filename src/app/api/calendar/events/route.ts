@@ -109,7 +109,7 @@ export async function POST(request: Request) {
 
     // Create reminders
     if (reminderMinutesBefore && reminderMinutesBefore.length > 0) {
-      const reminders = reminderMinutesBefore.map((minutes) => {
+      const reminders = reminderMinutesBefore.map((minutes: number) => {
         const startTime = new Date(startDatetime)
         const reminderTime = new Date(startTime.getTime() - minutes * 60000)
         return {

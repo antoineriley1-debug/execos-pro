@@ -167,7 +167,7 @@ export async function GET(request: Request) {
         weeklyPath: {
           title: "This Week's Critical Path",
           deadlines: weeklyDeadlines || [],
-          projectCount: projects?.length || 0,
+          projectCount: projectsAtRisk?.length || 0,
         },
         vendorIntelligence: {
           title: 'Vendor Intelligence',

@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     // Upload to Supabase Storage
     const storagePath = `${user.user.id}/${Date.now()}-${filename}`
-    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+    const { error: uploadError } = await supabaseAdmin.storage
       .from('documents')
       .upload(storagePath, file, { upsert: false })
 

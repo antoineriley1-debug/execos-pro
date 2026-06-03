@@ -255,16 +255,6 @@ function escapeHtml(text: string): string {
   return div.innerHTML
 }
 
-// Fallback for Node.js environment
-function escapeHtmlNode(text: string): string {
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
-
 export async function POST(
   request: NextRequest,
   { params }: { params: { jobId: string } }
@@ -385,8 +375,7 @@ export async function POST(
       return NextResponse.json(response)
     } else {
       // Return as file download
-      const responseBody = format === 'json' ? JSON.stringify(data) : data
-      return new NextResponse(responseBody, {
+      return new NextResponse(data, {
         status: 200,
         headers: {
           'Content-Type': contentType,

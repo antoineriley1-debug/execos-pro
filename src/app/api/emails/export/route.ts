@@ -2,19 +2,13 @@
 // Export single email investigation in multiple formats
 
 import { createClient } from '@supabase/supabase-js'
-import { Anthropic } from '@anthropic-ai/sdk'
 import jsPDF from 'jspdf'
-import { Packer, Document, Paragraph, Table, TableRow, TableCell, HeadingLevel, AlignmentType, BorderStyle } from 'docx'
-import JSZip from 'jszip'
+import { Packer, Document, Paragraph, Table, TableRow, TableCell, HeadingLevel, AlignmentType } from 'docx'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
-
-const anthropic = new Anthropic({
-  apiKey: process.env.CLAUDE_API_KEY,
-})
 
 interface ExportRequest {
   emailId: string
@@ -60,12 +54,12 @@ async function generatePdfExport(
 
   // Email Header Section
   doc.setFontSize(12)
-  doc.setFont(undefined, 'bold')
+  doc.setFont("Helvetica", 'bold')
   doc.text('Email Header', margin, yPosition)
   yPosition += 8
 
   doc.setFontSize(9)
-  doc.setFont(undefined, 'normal')
+  doc.setFont("Helvetica", 'normal')
   const emailDetails = [
     [`From: ${emailData.sender_email}`],
     [`To: ${emailData.recipient_email || 'N/A'}`],
@@ -82,12 +76,12 @@ async function generatePdfExport(
 
   // Email Body
   doc.setFontSize(11)
-  doc.setFont(undefined, 'bold')
+  doc.setFont("Helvetica", 'bold')
   doc.text('Email Body', margin, yPosition)
   yPosition += 6
 
   doc.setFontSize(9)
-  doc.setFont(undefined, 'normal')
+  doc.setFont("Helvetica", 'normal')
   const bodyLines = doc.splitTextToSize(emailData.body_text || 'N/A', contentWidth)
   doc.text(bodyLines, margin, yPosition)
   yPosition += bodyLines.length * 4 + 4
@@ -95,52 +89,52 @@ async function generatePdfExport(
   // AI Analysis Section
   if (options.includeFullAnalysis && analysis) {
     doc.setFontSize(11)
-    doc.setFont(undefined, 'bold')
+    doc.setFont("Helvetica", 'bold')
     doc.text('AI Analysis', margin, yPosition)
     yPosition += 6
 
     doc.setFontSize(9)
-    doc.setFont(undefined, 'normal')
+    doc.setFont("Helvetica", 'normal')
 
     // Intent
-    doc.setFont(undefined, 'bold')
+    doc.setFont("Helvetica", 'bold')
     doc.text('Sender Intent:', margin, yPosition)
-    doc.setFont(undefined, 'normal')
+    doc.setFont("Helvetica", 'normal')
     yPosition += 4
     const intentLines = doc.splitTextToSize(analysis.sender_intent || 'N/A', contentWidth - 10)
     doc.text(intentLines, margin + 5, yPosition)
     yPosition += intentLines.length * 4 + 3
 
     // Risk Level
-    doc.setFont(undefined, 'bold')
+    doc.setFont("Helvetica", 'bold')
     doc.text('Risk Level:', margin, yPosition)
-    doc.setFont(undefined, 'normal')
+    doc.setFont("Helvetica", 'normal')
 
-    const riskColors = {
+    const riskColors: { [key: string]: [number, number, number] } = {
       green: [76, 175, 80],
       yellow: [255, 193, 7],
       red: [244, 67, 54],
     }
     const riskColor = riskColors[analysis.risk_level as keyof typeof riskColors] || [128, 128, 128]
-    doc.setFillColor(...riskColor)
+    doc.setFillColor(riskColor[0], riskColor[1], riskColor[2])
     doc.rect(margin + 25, yPosition - 4, 8, 8, 'F')
     doc.text(analysis.risk_level.toUpperCase(), margin + 35, yPosition, { maxWidth: contentWidth - 35 })
     yPosition += 6
 
     // Tone
-    doc.setFont(undefined, 'bold')
+    doc.setFont("Helvetica", 'bold')
     doc.text('Tone:', margin, yPosition)
-    doc.setFont(undefined, 'normal')
+    doc.setFont("Helvetica", 'normal')
     doc.text(analysis.tone || 'N/A', margin + 15, yPosition)
     yPosition += 6
 
     // Action Items
     if (analysis.action_items && analysis.action_items.length > 0) {
-      doc.setFont(undefined, 'bold')
+      doc.setFont("Helvetica", 'bold')
       doc.text('Action Items:', margin, yPosition)
       yPosition += 4
 
-      doc.setFont(undefined, 'normal')
+      doc.setFont("Helvetica", 'normal')
       analysis.action_items.forEach((item: string) => {
         doc.text(`• ${item}`, margin + 5, yPosition, { maxWidth: contentWidth - 10 })
         yPosition += 4
@@ -150,9 +144,9 @@ async function generatePdfExport(
 
     // Deadline
     if (analysis.deadline_pressure) {
-      doc.setFont(undefined, 'bold')
+      doc.setFont("Helvetica", 'bold')
       doc.text('Deadline:', margin, yPosition)
-      doc.setFont(undefined, 'normal')
+      doc.setFont("Helvetica", 'normal')
       doc.text(analysis.deadline_pressure, margin + 18, yPosition, { maxWidth: contentWidth - 18 })
       yPosition += 6
     }
@@ -163,12 +157,12 @@ async function generatePdfExport(
   // Recommended Response
   if (options.includeResponseTemplate) {
     doc.setFontSize(11)
-    doc.setFont(undefined, 'bold')
+    doc.setFont("Helvetica", 'bold')
     doc.text('Recommended Response Template', margin, yPosition)
     yPosition += 6
 
     doc.setFontSize(9)
-    doc.setFont(undefined, 'normal')
+    doc.setFont("Helvetica", 'normal')
     const responseTemplate = `Dear ${emailData.sender_email?.split('@')[0] || 'Sender'},
 
 [Provide your response here]
@@ -190,7 +184,7 @@ Best regards`
   )
   doc.text(`Page 1 of 1`, pageWidth - margin, pageHeight - 10, { align: 'right' })
 
-  return doc.output('arraybuffer') as Buffer
+  return Buffer.from(doc.output('arraybuffer'))
 }
 
 /**
@@ -225,7 +219,7 @@ async function generateDocxExport(
             width: { size: 100, type: 'pct' },
             rows: [
               new TableRow({
-                cells: [
+                children: [
                   new TableCell({
                     children: [new Paragraph('From')],
                   }),
@@ -235,7 +229,7 @@ async function generateDocxExport(
                 ],
               }),
               new TableRow({
-                cells: [
+                children: [
                   new TableCell({
                     children: [new Paragraph('Subject')],
                   }),
@@ -245,7 +239,7 @@ async function generateDocxExport(
                 ],
               }),
               new TableRow({
-                cells: [
+                children: [
                   new TableCell({
                     children: [new Paragraph('Date')],
                   }),
@@ -602,7 +596,7 @@ ${analysis.deadline_pressure ? `Deadline: ${analysis.deadline_pressure}` : ''}
     const fileName = `${exportName || emailData.subject || 'email'}-${new Date().getTime()}.${fileExtension}`
 
     // Store in Supabase Storage
-    const { data: fileData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('email-exports')
       .upload(`${emailData.user_id}/${fileName}`, fileBuffer, {
         contentType: mimeType,

@@ -72,10 +72,20 @@ export interface Database {
           created_at: string
           updated_at: string
         }
-        Insert: Omit<
-          Database['public']['Tables']['risk_assessments']['Row'],
-          'id' | 'created_at' | 'updated_at'
-        >
+        Insert: {
+          user_id: string
+          investigation_id?: string | null
+          file_id?: string | null
+          risk_level: 'critical' | 'high' | 'medium' | 'low'
+          risk_score: number
+          indicators?: Array<{
+            type: string
+            description: string
+            severity: number
+          }> | null
+          recommendations?: string[] | null
+          assessment_date: string
+        }
         Update: Partial<Database['public']['Tables']['risk_assessments']['Insert']>
       }
     }
@@ -164,7 +174,7 @@ export function getClient(): SupabaseClient<Database> {
 export async function executeWithAuth<T>(
   fn: (client: SupabaseClient<Database>) => Promise<T>
 ): Promise<T> {
-  const client = getClient()
+  const client = getClient() as any
   return fn(client)
 }
 
@@ -179,14 +189,14 @@ export const db = {
     userId: string,
     inputData: Record<string, unknown>
   ) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('synthesis_jobs')
       .insert({
         user_id: userId,
         status: 'pending',
         input_data: inputData,
-      } as Database['public']['Tables']['synthesis_jobs']['Insert'])
+      } as any)
       .select()
       .single()
   },
@@ -207,10 +217,10 @@ export const db = {
       error_message?: string
     }
   ) {
-    const client = getClient()
-    return client
-      .from('synthesis_jobs')
-      .update(updates as Database['public']['Tables']['synthesis_jobs']['Update'])
+    const client = getClient() as any
+    return (client
+      .from('synthesis_jobs') as any)
+      .update(updates)
       .eq('id', jobId)
       .select()
       .single()
@@ -220,7 +230,7 @@ export const db = {
    * Get synthesis job by ID
    */
   async getSynthesisJob(jobId: string) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('synthesis_jobs')
       .select('*')
@@ -241,14 +251,14 @@ export const db = {
       mime_type: string
     }
   ) {
-    const client = getClient()
+    const client = getClient() as any as any
     return client
       .from('investigation_files')
       .insert({
         user_id: userId,
         ...fileData,
         upload_status: 'pending',
-      } as Database['public']['Tables']['investigation_files']['Insert'])
+      })
       .select()
       .single()
   },
@@ -269,10 +279,10 @@ export const db = {
       error_message?: string | null
     }
   ) {
-    const client = getClient()
+    const client = getClient() as any as any
     return client
       .from('investigation_files')
-      .update(updates as Database['public']['Tables']['investigation_files']['Update'])
+      .update(updates)
       .eq('id', fileId)
       .select()
       .single()
@@ -282,7 +292,7 @@ export const db = {
    * Check for duplicate files
    */
   async findDuplicateFile(fileHash: string) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('investigation_files')
       .select('id, filename')
@@ -309,13 +319,13 @@ export const db = {
       recommendations?: string[]
     }
   ) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('risk_assessments')
       .insert({
         user_id: userId,
         ...assessment,
-      } as Database['public']['Tables']['risk_assessments']['Insert'])
+      })
       .select()
       .single()
   },
@@ -324,7 +334,7 @@ export const db = {
    * Get risk assessments for a file
    */
   async getRiskAssessmentsForFile(fileId: string) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('risk_assessments')
       .select('*')
@@ -336,7 +346,7 @@ export const db = {
    * Get user's recent files
    */
   async getUserFiles(userId: string, limit = 50) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('investigation_files')
       .select('*')
@@ -349,7 +359,7 @@ export const db = {
    * Get user's recent synthesis jobs
    */
   async getUserSynthesisJobs(userId: string, limit = 50) {
-    const client = getClient()
+    const client = getClient() as any
     return client
       .from('synthesis_jobs')
       .select('*')

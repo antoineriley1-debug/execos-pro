@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { Anthropic } from '@anthropic-ai/sdk'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -14,6 +15,9 @@ if (!claudeApiKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey)
+const anthropic = new Anthropic({
+  apiKey: claudeApiKey,
+})
 
 interface SynthesisGenerateRequest {
   startDate?: string
@@ -150,32 +154,16 @@ Provide the summary as a structured document with these sections:
     },
   ]
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': claudeApiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 4000,
-      system: systemPrompt,
-      messages: messages,
-    }),
+  const response = await anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 4000,
+    system: systemPrompt,
+    messages: messages,
   })
 
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(`Claude API error: ${errorData.error?.message || 'Unknown error'}`)
-  }
-
-  const result = await response.json()
-
-  const synthesis =
-    result.content[0].type === 'text' ? result.content[0].text : ''
-  const inputTokens = result.usage?.input_tokens || 0
-  const outputTokens = result.usage?.output_tokens || 0
+  const synthesis = response.content.find((c) => c.type === 'text')?.text || ''
+  const inputTokens = response.usage?.input_tokens || 0
+  const outputTokens = response.usage?.output_tokens || 0
 
   return {
     synthesis,

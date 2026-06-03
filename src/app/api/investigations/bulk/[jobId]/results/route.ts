@@ -49,8 +49,8 @@ interface ResultsResponse {
 }
 
 async function generateAggregateSummary(
-  jobId: string,
-  userId: string,
+  _jobId: string,
+  _userId: string,
   summaries: any[]
 ): Promise<AggregateSummary | null> {
   try {

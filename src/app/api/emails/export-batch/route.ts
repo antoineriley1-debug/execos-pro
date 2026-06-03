@@ -134,8 +134,8 @@ export async function POST(request: Request) {
       }
 
       // Handle final content
-      let outputFile: Buffer | string
-      let outputFileName: string
+      let outputFile: Buffer | string | null = null
+      let outputFileName: string = ''
 
       if (format === 'csv') {
         outputFile = csvRows.join('\n')
@@ -148,13 +148,14 @@ export async function POST(request: Request) {
         outputFileName = `batch-export-${batchJob.id.slice(0, 8)}.${format}`
       } else if (separateFiles) {
         // Create zip
-        outputFile = await zip.generateAsync({ type: 'arraybuffer' })
+        const zipBuffer = await zip.generateAsync({ type: 'arraybuffer' })
+        outputFile = Buffer.from(zipBuffer)
         outputFileName = `batch-export-${batchJob.id.slice(0, 8)}.zip`
       }
 
       // Upload to storage
       if (outputFile) {
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('batch-exports')
           .upload(`${userId}/${outputFileName}`, outputFile, {
             contentType: format === 'csv' ? 'text/csv' : 'application/octet-stream',

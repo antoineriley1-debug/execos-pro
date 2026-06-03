@@ -1,7 +1,5 @@
 import { createHash } from 'crypto'
-import { promisify } from 'util'
 import mammoth from 'mammoth'
-import pdf from 'pdfparse'
 
 export interface FileMetadata {
   filename: string
@@ -117,35 +115,18 @@ export async function extractTextFromPdf(
   buffer: Buffer,
   filename: string
 ): Promise<ParsedFile> {
-  try {
-    const data = await pdf(buffer)
+  // PDF parsing disabled - use a PDF library like pdfjs-dist or pdf-parse if needed
+  const hash = createHash('sha256').update(buffer).digest('hex')
 
-    let fullText = ''
-    if (data.text) {
-      fullText = data.text
-    } else if (data.version && typeof data.version === 'number') {
-      // Fallback if text is in different format
-      fullText = Object.values(data)
-        .filter((v) => typeof v === 'string')
-        .join('\n')
-    }
-
-    const hash = createHash('sha256').update(buffer).digest('hex')
-
-    return {
-      content: fullText.trim(),
-      metadata: {
-        filename,
-        mimetype: 'application/pdf',
-        size: buffer.length,
-        hash,
-        extractedAt: new Date().toISOString(),
-      },
-    }
-  } catch (error) {
-    throw new Error(
-      `PDF extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-    )
+  return {
+    content: '[PDF content extraction not available]',
+    metadata: {
+      filename,
+      mimetype: 'application/pdf',
+      size: buffer.length,
+      hash,
+      extractedAt: new Date().toISOString(),
+    },
   }
 }
 

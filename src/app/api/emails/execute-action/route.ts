@@ -446,7 +446,7 @@ async function createContactFromEmail(
 async function linkToProject(
   email: any,
   siteId: string,
-  userId: string,
+  _userId: string,
   projectId?: string
 ): Promise<any> {
   if (!projectId) {
@@ -591,7 +591,7 @@ async function saveToMemory(
 async function flagForCompliance(
   email: any,
   analysis: any,
-  siteId: string,
+  _siteId: string,
   userId: string
 ): Promise<any> {
   const { data: task, error } = await supabase
@@ -625,7 +625,7 @@ async function flagForCompliance(
 async function escalateRisk(
   email: any,
   analysis: any,
-  siteId: string,
+  _siteId: string,
   userId: string
 ): Promise<any> {
   // Create escalation task
@@ -659,7 +659,7 @@ async function escalateRisk(
  * Archive email
  */
 async function archiveEmail(email: any): Promise<any> {
-  const { data: archived, error } = await supabase
+  const { error } = await supabase
     .from('emails')
     .update({ archived: true })
     .eq('id', email.id)

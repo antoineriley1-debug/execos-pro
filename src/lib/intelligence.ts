@@ -264,7 +264,6 @@ export const calendarUtils = {
       day: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
-      meridiem: 'short',
     })
   },
 

@@ -345,7 +345,7 @@ export function FileUploadManager() {
 function FileDetailView({
   file,
   onDelete,
-  onRefresh,
+  onRefresh: _onRefresh,
 }: {
   file: UploadedFile
   onDelete: () => void

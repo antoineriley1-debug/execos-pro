@@ -70,12 +70,6 @@ export async function POST(request: Request) {
       .eq('site_id', siteId)
       .limit(10)
 
-    const { data: contacts } = await supabase
-      .from('contacts')
-      .select('id, name, email')
-      .eq('site_id', siteId)
-      .limit(10)
-
     // Use Claude to generate smart action suggestions
     const suggestionPrompt = `You are an intelligent assistant that suggests actions for emails.
 
@@ -157,7 +151,7 @@ Return ONLY a JSON array of suggestions, no other text.`;
       executed: false,
     }))
 
-    const { data: storedSuggestions, error: storeError } = await supabase
+    const { error: storeError } = await supabase
       .from('email_action_suggestions')
       .insert(suggestionRecords)
       .select()

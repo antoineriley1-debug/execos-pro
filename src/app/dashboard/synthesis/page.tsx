@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { SynthesisTimeline } from '@/components/SynthesisTimeline'
 import { SynthesisViewer } from '@/components/SynthesisViewer'
 import { SynthesisQA } from '@/components/SynthesisQA'
